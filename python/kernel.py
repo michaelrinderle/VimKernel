@@ -38,8 +38,14 @@ DEBUG = True
 
 def set_vim_settings():
     # set column and kernel error gutter sign
-    vim.command(":highlight SignColumn guibg=darkgrey")
-    vim.command(":sign define kernel text=k")
+    vim.command(":highlight kernel ctermfg=178 guifg=178")
+    vim.command(":sign define kernel text=k texthl=kernel")
+
+    # colorschemes
+    vim.command(":highlight ERROR guifg=167 ctermfg=167")
+    vim.command(":highlight WARNING guifg=100 ctermfg=100")
+    vim.command(":highlight ViolationWarning guifg=144 ctermfg=144")
+
     # set tab spaces for kernel styling
     # kernel.org/doc/html/v4.10/process/coding-style.html
     vim.command(":set expandtab!")
@@ -130,9 +136,9 @@ def load_patch_violation_hint():
         # look for a violation on line 
         for violation in patch_violations:
             if row == int(violation.line):
-                # display violation hint
+                # display violation hints
+                # last violation is displayed
                 display_status_bar_hint(violation)
-                break
     except Exception as e:
         display_explicit_exception(e)
     
@@ -148,9 +154,8 @@ def clear_gutter():
 
 def display_status_bar_hint(patch_violation):
     # create our violation hint and print to status bar
-    content = "{0}:{1}".format(patch_violation.type, patch_violation.warning
-        .replace('\n', '').encode('unicode-escape').decode())
-    print(content)
+    vim.command(":echohl {0} | echo \"{1} \" | echohl ViolationWarning | echon \"{2}\"".format(patch_violation.type,
+    patch_violation.type, patch_violation.warning.replace('\n', '').encode('unicode-escape').decode()))
     
 def display_explicit_exception(e):
     global debug
