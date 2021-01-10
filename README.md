@@ -26,5 +26,5 @@ The one and only Vim/Neovim plugin for Linux kernel developers
 * Patch Management
     * Add pipeline checklist & operations for patch submission
 
-# Demo
+# demo
 ![Screenshot](vim-kernel.gif)
